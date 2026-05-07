@@ -1,0 +1,149 @@
+<div class="todo-wrapper">
+  <div class="todo-card">
+    <h1 class="title">My Tasks</h1>
+
+    <!-- Add task -->
+    <div class="input-row">
+      <input
+        [(ngModel)]="newTask"
+        placeholder="What do you need to do?"
+      />
+      <button class="btn-add" (click)="addTask()">Add</button>
+    </div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <span class="legend-item">
+        <span class="status-dot pending"></span> Pending
+      </span>
+
+      <span class="legend-item">
+        <span class="status-dot completed"></span> Completed
+      </span>
+    </div>
+
+    <!-- Filter + Sort toolbar -->
+    <div class="toolbar">
+      <div class="filters">
+        <button
+          class="chip"
+          [class.active]="filterOption === 'all'"
+          (click)="setFilter('all')">
+          All
+        </button>
+        <button
+          class="chip"
+          [class.active]="filterOption === 'active'"
+          (click)="setFilter('active')">
+          Active
+        </button>
+        <button
+          class="chip"
+          [class.active]="filterOption === 'completed'"
+          (click)="setFilter('completed')">
+          Completed
+        </button>
+      </div>
+
+      <div class="sort-row">
+        <label>Sort:</label>
+        <select [(ngModel)]="sortOption" (change)="applySortAndFilter()">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="az">A → Z</option>
+          <option value="za">Z → A</option>
+          <option value="completed-first">Completed first</option>
+          <option value="active-first">Active first</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Task list -->
+    <ul class="task-list">
+      <li
+        *ngFor="let task of displayedTodos"
+        class="task-row"
+        [class.completed]="task.completed"
+      >
+        <!-- LEFT: status dot (✅ FIXED HERE) -->
+        <span
+          class="status-dot"
+          [ngClass]="{
+            pending: !task.completed,
+            completed: task.completed
+          }"
+        ></span>
+
+        <!-- MIDDLE: title OR edit -->
+        <div class="task-main">
+          <!-- EDIT MODE -->
+          <div *ngIf="editingId === task.id; else viewMode">
+            <input
+              class="edit-input"
+              [(ngModel)]="editTitle"
+              autofocus
+            />
+          </div>
+
+          <!-- VIEW MODE -->
+          <ng-template #viewMode>
+          <span
+            class="task-title"
+            [class.completed]="task.completed"
+          >
+            {{ task.title }}
+          </span>
+          </ng-template>
+        </div>
+
+        <!-- RIGHT: actions -->
+        <div class="task-actions">
+          <button
+            *ngIf="editingId === task.id"
+            class="btn-save"
+            (click)="saveEdit(task)"
+          >
+            Save
+          </button>
+
+          <button
+            *ngIf="editingId === task.id"
+            class="btn-cancel"
+            (click)="cancelEdit()"
+          >
+            Cancel
+          </button>
+
+          <button
+            *ngIf="editingId !== task.id"
+            class="btn-edit"
+            (click)="startEdit(task)"
+          >
+            ✎ Edit
+          </button>
+
+          <button
+            class="btn-done"
+            (click)="toggleCompleted(task)"
+          >
+            {{ task.completed ? '↺ Undo' : '✔ Done' }}
+          </button>
+
+          <button
+            type="button"
+            class="btn-delete"
+            (click)="confirmDelete(task)"
+          >
+            ✖ Delete
+          </button>
+        </div>
+      </li>
+
+@if (displayedTodos.length === 0) {
+  <li class="empty">
+    No tasks match this view.
+  </li>
+}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+.login-wrapper {
+  max-width: 350px;
+  margin: 60px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.login-form label {
+  display: block;
+  margin: 10px 0 4px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

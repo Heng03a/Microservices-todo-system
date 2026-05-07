@@ -1,0 +1,237 @@
+/* =========================================
+   PAGE LAYOUT
+   ========================================= */
+.todo-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  background: #f3f4f6;
+  min-height: 100vh;
+}
+
+.todo-card {
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   TITLE
+   ========================================= */
+.title {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* =========================================
+   ADD TASK
+   ========================================= */
+.input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.btn-add {
+  padding: 12px 18px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-add:hover {
+  background: #1e40af;
+}
+
+/* =========================================
+   LEGEND + STATUS DOTS (SINGLE SOURCE)
+   ========================================= */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.status-dot.pending {
+  background-color: #f59e0b; /* amber */
+}
+
+.status-dot.completed {
+  background-color: #22c55e; /* green */
+}
+
+/* =========================================
+   TOOLBAR
+   ========================================= */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+}
+
+.chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.chip.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.sort-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sort-row label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.sort-row select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 2px solid #d1d5db;
+  font-size: 13px;
+}
+
+/* =========================================
+   TASK LIST
+   ========================================= */
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 12px;
+  background: #f9fafb;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  transition: background 0.15s ease;
+}
+
+.task-row:hover {
+  background: #f3f4f6;
+}
+
+/* DO NOT use opacity on the whole row */
+.task-title {
+  font-size: 16px;
+  color: #374151;
+}
+
+.task-title.completed {
+  text-decoration: line-through;
+  color: blueviolet;
+  background-color: #f3f4f6;
+}
+
+
+.task-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* =========================================
+   ACTION BUTTONS
+   ========================================= */
+.task-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.task-actions button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.task-actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+}
+
+.btn-done { background: #10b981; }
+.btn-edit { background: #3b82f6; }
+.btn-save { background: #10b981; }
+.btn-cancel { background: #9ca3af; }
+.btn-delete { background: #ef4444; }
+
+/* =========================================
+   EMPTY STATE
+   ========================================= */
+.empty {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 600px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-row {
+    flex-direction: column;
+  }
+
+  .btn-add {
+    width: 100%;
+  }
+
+  .task-actions {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+}

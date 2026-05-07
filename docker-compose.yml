@@ -10,7 +10,7 @@ services:
       - dynamodb-data:/home/dynamodblocal/data
 
   backend:
-    build: .
+    build: ./backend
     container_name: microservices-backend
     ports:
       - "3040:3000"
@@ -21,7 +21,8 @@ services:
       AWS_SECRET_ACCESS_KEY: dummy
     depends_on:
       - dynamodb-local
+    restart: unless-stopped
 
 volumes:
   dynamodb-data:
-
+  
