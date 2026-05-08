@@ -1,30 +1,24 @@
 import express from "express";
-import { v4 as uuidv4 } from "uuid";
 
-import { dynamoClient, TABLE_NAME } from "../dynamodb.js";
 import {
-  DynamoDBDocumentClient,
   ScanCommand,
   PutCommand,
-  UpdateCommand,
   DeleteCommand,
+  UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
+
+import { v4 as uuidv4 } from "uuid";
+import { docClient, TABLE_NAME } from "../config/dynamodb.js";
 
 const router = express.Router();
 
-
-// 🔧 DynamoDB Client (LOCAL)
-
-const docClient = DynamoDBDocumentClient.from(dynamoClient);
-
-
-// ======================================================
-// ✅ GET ALL TODOS
-// ======================================================
+// GET all todos
 router.get("/", async (req, res) => {
   try {
     const result = await docClient.send(
-      new ScanCommand({ TableName: TABLE_NAME })
+      new ScanCommand({
+        TableName: TABLE_NAME,
+      })
     );
 
     res.json(result.Items || []);
@@ -34,23 +28,20 @@ router.get("/", async (req, res) => {
   }
 });
 
-
-// ======================================================
-// ✅ CREATE TODO (UUID)
-// ======================================================
+// POST create todo
 router.post("/", async (req, res) => {
   try {
     const { title, completed } = req.body;
 
-    // 🔍 validation
-    if (!title) {
+    if (!title || title.trim() === "") {
       return res.status(400).json({ message: "Title is required" });
     }
 
     const todo = {
       id: uuidv4(),
-      title,
+      title: title.trim(),
       completed: completed ?? false,
+      createdAt: new Date().toISOString(),
     };
 
     await docClient.send(
@@ -67,47 +58,36 @@ router.post("/", async (req, res) => {
   }
 });
 
-
-// ======================================================
-// ✅ UPDATE TODO
-// ======================================================
+// PUT update todo
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { title, completed } = req.body;
 
-    if (!title) {
-      return res.status(400).json({ message: "Title is required" });
-    }
-
-    const updatedTodo = {
-      id,
-      title,
-      completed: completed ?? false,
-    };
-
     await docClient.send(
       new UpdateCommand({
         TableName: TABLE_NAME,
         Key: { id },
-        UpdateExpression: "SET title = :title, completed = :completed",
+        UpdateExpression: "SET #title = :title, completed = :completed",
+        ExpressionAttributeNames: {
+          "#title": "title",
+        },
         ExpressionAttributeValues: {
           ":title": title,
-          ":completed": completed ?? false,
+          ":completed": completed,
         },
+        ReturnValues: "ALL_NEW",
       })
     );
 
-    res.json(updatedTodo);
+    res.json({ message: "Todo updated successfully" });
   } catch (error) {
     console.error("PUT error:", error);
     res.status(500).json({ message: "Failed to update todo" });
   }
 });
 
-// ======================================================
-// ✅ DELETE TODO
-// ======================================================
+// DELETE todo
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -119,12 +99,11 @@ router.delete("/:id", async (req, res) => {
       })
     );
 
-    res.json({ message: "Todo deleted" });
+    res.json({ message: "Todo deleted successfully" });
   } catch (error) {
     console.error("DELETE error:", error);
     res.status(500).json({ message: "Failed to delete todo" });
   }
 });
-
 
 export default router;
