@@ -1,6 +1,15 @@
 import { DeleteCommand } from "@aws-sdk/lib-dynamodb";
 import { docClient, TABLE_NAME } from "./config/dynamodb.js";
 
+
+const corsHeaders = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin":
+    "http://microservices-todo-frontend-phua-kia-heng.s3-website-us-east-1.amazonaws.com",
+  "Access-Control-Allow-Headers": "Content-Type,Authorization",
+  "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+};
+
 export const handler = async (event) => {
   try {
     const id = event.pathParameters?.id;

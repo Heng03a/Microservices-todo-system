@@ -1,5 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import jwt from "jsonwebtoken";
 
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION || "ap-southeast-1",
@@ -40,3 +41,20 @@ export const handler = async () => {
     };
   }
 };
+function verifyToken(event) {
+  const authHeader =
+    event.headers?.authorization || event.headers?.Authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return null;
+  }
+
+  const token = authHeader.replace("Bearer ", "");
+  const jwtSecret = process.env.JWT_SECRET || "change-this-secret";
+
+  try {
+    return jwt.verify(token, jwtSecret);
+  } catch {
+    return null;
+  }
+}
