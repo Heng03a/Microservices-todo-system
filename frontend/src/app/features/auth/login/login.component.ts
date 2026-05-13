@@ -12,8 +12,8 @@ import { AuthService } from '../../../core/auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  email = 'boss@test.com';
-  password = '123456';
+  email = 'admin';
+  password = 'password123';
   errorMessage = '';
   isLoading = false;
 
